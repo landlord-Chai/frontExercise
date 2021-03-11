@@ -1,0 +1,65 @@
+
+<!--dasdas-->
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <!--meta描述网站信息-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<form action= "http://39.108.235.35:1323/testGet" method="post">
+
+    <p>*名字:</br><input type="text" name ="userName" placeholder="请输入名字"></p>
+
+    <p>*学号:</br><input type="password" name ="num" placeholder="请输入学号"></p>
+
+    <p>*采购事由:</br><textarea name ="purchaseReason" cols="50" rows="10" placeholder="请输入采购事由"></textarea></p>
+
+    <p>*采购类别:</br>
+        <select name="purchaseCategory">
+            <option value="researchSupplies">科研耗材</option>
+            <option value="device">设备器材</option>
+            <option value="3DPrint">3D打印</option>
+            <option value="customProcessing">定制加工</option>
+            <option value="officeSupplies">办公用品</option>
+            <option value="activitySupplies">活动用品</option>
+            <option value="food">食物零食</option>
+            <option value="other">其他事项</option>
+        </select>
+    </p>
+
+
+    <p>期望交付时间:</br><input type="date" name="deliverTime" value="" /></p>
+
+    <fieldset>
+        <legend>采购明细:</legend>
+
+        <p>*采购名称:</br><input type="text" name ="purchaseName" placeholder="请输入"></p>
+
+        <p>*厂家全名:</br><input type="text" name ="purchaseFactoryName" placeholder="请输入"></p>
+
+        <p>*品牌全称:</br><input type="text" name ="purchaseBrandName" placeholder="请输入"></p>
+
+        <p>*规格参数:</br><input type="text" name ="purchaseParameter" placeholder="请输入"></p>
+
+        <p>*采购数量:</br><input type="text" name ="purchaseNum" placeholder="请输入"></p>
+
+        <p>*采购总价:</br><input type="text" name ="purchaseCost" placeholder="采购总价 = 单价 * 数量"></p>
+
+        <p>*采购链接:</br><input type="text" name ="purchaseLink" placeholder="请输入完整的采购链接"></p>
+
+        <p>*商品截图:</br><input type="file" name ="purchasePicture"></p>
+
+    </fieldset>
+    <p>
+        <input type="submit">
+        <input type="reset">
+    </p>
+</form>
+
+</body>
+</html>

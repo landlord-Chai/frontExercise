@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script>
+        function jump(){
+            window.open("showDetail.html");
+            // alert(1);
+        }
+        function jumpto(str){
+            window.open(str);
+            // alert(1);
+        }
+        function GetObjStr(obj){
+            var str="";
+            for (var item in obj){
+                str +=item+":"+obj[item]+"\n";
+            }
+            // alert(str);
+            return str;
+        }
+
+        function addNode()
+        {
+
+            var json = {
+                "range": "self",
+                "list":[
+                    {"name":"aaa","purchaseName":"bbb","data":"ccc","process":"ddd","ID":"233"},
+                    {"name":"CTH","purchaseName":"HTC","data":"111","process":"done","ID":"666"},
+                    {"name":"aaa","purchaseName":"bbb","data":"ccc","process":"ddd","ID":"233"},
+                    {"name":"CTH","purchaseName":"HTC","data":"111","process":"done","ID":"666"},
+                ]
+            }
+            var listNumber = json["list"].length;
+            var jsonList = json["list"];
+
+            for(var i = 0 ;i<listNumber;i++){
+                var insertLine = document.createElement("p");
+                insertLine.append(document.createTextNode(GetObjStr(jsonList[i])));
+
+
+                var buttonNode = document.createElement("input");
+                buttonNode.type = "button";
+                buttonNode.value = "查看详情";
+                buttonNode.onclick = jumpto;
+
+                insertLine.append(buttonNode);
+                document.getElementById("insert").appendChild(insertLine);
+            }
+
+
+
+
+            // for(var k in jsonList ){//遍历packJson 对象的每个key/value对,k为key
+            //     alert(k + " " + jsonList[k]);
+            // }
+        }
+    </script>
+</head>
+<body>
+
+<h2 id="title">点击按钮↓</h2>
+<button type="button" onclick="addNode()">请求数据</button>
+<div id="myDiv"></div>
+
+<p id="demo"></p>
+
+<p id="insert"></p>
+
+<p id="nice"></p>
+
+</body>
+</html>

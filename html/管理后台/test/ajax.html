@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ajax</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+
+
+        var token = "hello";
+        function GetObjStr(obj){
+            var str="";
+            for (var item in obj){
+                str +=item+":"+obj[item]+"\n";
+            }
+             alert(str);
+            return str;
+        }
+
+
+        var userList;
+        var taskforceList;
+        var teamList;
+
+        function GetList(){
+            ////获得成员列表
+            $.ajax({
+                url:"http://39.108.235.35:1323/getUserList",
+                type:"get",
+                headers: {
+                    "Authorization": token
+                },
+                processData:false,
+                success: function (data, textStatus) {
+                    if (textStatus == "success") {
+                        userList = data["data"]["user_list"];
+                        // alert("user: "+ userList);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.responseText);
+                    return false;
+                }
+            });
+            //TaskForce列表
+            $.ajax({
+                url:"http://39.108.235.35:1323/getTaskforceList",
+                type:"get",
+                headers: {
+                    "Authorization": token
+                },
+                processData:false,
+                success: function (data, textStatus) {
+                    if (textStatus == "success") {
+                        taskforceList = data["data"]["list"];
+                        // alert("task: "+ taskforceList);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.responseText);
+                    return false;
+                }
+            });
+            //Team列表
+            $.ajax({
+                url:"http://39.108.235.35:1323/getTeamList",
+                type:"get",
+                headers: {
+                    "Authorization": token
+                },
+                processData:false,
+                success: function (data, textStatus) {
+                    if (textStatus == "success") {
+                        teamList = data["data"]["list"];
+                        // alert("team: "+ teamList);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.responseText);
+                    return false;
+                }
+            });
+        }
+        function SendAddFile()
+        {
+            var form = new FormData(document.getElementById("form1"));
+            if(!form.get("title")){
+                alert("文档名不能为空");
+                return;
+            }
+            else{
+                var timeStartTxt = form.get("start_date_local").toString();
+                var timeEndTxt = form.get("end_date_local").toString();
+                var timeStartTxtFixed = timeStartTxt.replace("T"," ")+":00";
+                var timeEndTxtFixed = timeEndTxt.replace("T"," ")+":00";
+                document.getElementById("start_date").value = timeStartTxtFixed;
+                document.getElementById("end_date").value = timeEndTxtFixed;
+
+                $.ajax({
+                    url:"http://39.108.235.35:1323/createDocument",
+                    type:"post",
+                    headers: {
+                        "Authorization": token
+                    },
+                    processData:false,
+                    data:$('#form1').serialize(),
+
+                    success: function (data, textStatus) {
+                        if (textStatus == "success") {
+                            var url = data["data"]["url"];
+                            alert(textStatus);
+                            var insertLine = document.createElement("p");
+                            var insertLink = document.createElement("a");
+                            insertLink.href=url;
+                            insertLink.target="_blank";
+                            insertLink.text=form.get("title").toString();
+                            insertLine.append(insertLink);
+                            document.getElementById("insert").appendChild(insertLine);
+                            document.getElementById("titleID").value = "";
+                        }
+                    },
+
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.responseText);
+                        return false;
+                    }
+                });
+            }
+        }
+        function submit() {
+            $.ajax({
+                //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "39.108.235.35:1323" ,//url
+                data: $('#form1').serialize(),
+                headers: {
+                   "testHeader": "test"
+                },
+                success: function (result) {
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.resultCode == 200) {
+                        alert("SUCCESS");
+                    }
+                },
+                error : function() {
+                    alert($('#form1').serialize());
+                    alert("异常！");
+                }
+            });
+        }
+
+        function makeSelectBox(){
+            var listChosen;
+            var selectForm = document.getElementById("categoriesListWant");
+            var index = selectForm.selectedIndex;
+            var valueChosen = selectForm.options[index].value;
+
+            if(valueChosen === "User"){
+                listChosen = userList;
+            }
+            else if(valueChosen === "Taskforce"){
+                listChosen = taskforceList;
+            }
+            else if(valueChosen === "Team"){
+                listChosen = teamList;
+            }
+            else{
+                alert("请选择种类");
+                return;
+            }
+            var insertLine = document.createElement("select");
+            for(var i = 0; i < listChosen.length; i++){
+                insertLine.options.add(new Option(listChosen[i]["name"],listChosen[i]["openid"]));
+            }
+
+            document.getElementById("insertBox").appendChild(insertLine);
+            document.getElementById("insertBox").appendChild(document.createElement("p"));
+            selectForm.selectedIndex = 0;
+
+            // if()
+        }
+
+        $(document).ready(function(){
+            GetList();
+
+        });
+
+    </script>
+</head>
+<body>
+<div id="form-div">
+    <form id="form1" onsubmit="return false" action="##" method="post">
+        <p>教学周：<input name="week" type="number" value="112"/></p>
+        <p>文档名：<input name="title" type="text" value="12122" id="titleID"/></p>
+        <button type="button" onclick="SendAddFile()">添加文档</button>
+        <p id="insert"></p>
+        <p>起始时间：<input name="start_date_local" type="datetime-local" value="" /></p>
+        <p>结束时间：<input name="end_date_local" type="datetime-local" value=""/></p>
+        <p hidden> <input name="start_date" type="text" value="" id="start_date" /></p>
+        <p hidden> <input name="end_date" type="text" value="" id="end_date" /></p>
+        <p><input type="button" value="提交" onclick="submit()">
+    </form>
+
+    <form id="form2" onsubmit="return false" action="##" method="post">
+<!--        <select id="box" onchange="getvalue(this)"></select>-->
+
+        <p id="insertBox"></p>
+
+<!--        <select id="categoriesListWant" onchange="getvalue(this)">-->
+        <select id="categoriesListWant">
+            <option disabled selected value>- 请选择</option>
+            <option value="User">User</option>
+            <option value="Taskforce">Taskforce</option>
+            <option value="Team">Team</option>
+        </select>
+        <button type="button" onclick="makeSelectBox()">添加表单</button>
+
+        <p><input type="button" value="提交" onclick="submit()">
+    </form>
+</div>
+
+
+
+</body>
+</html>

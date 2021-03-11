@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <!--meta描述网站信息http://39.108.235.35:1323/testPost-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function checkForm()
+        {
+            alert("表单已提交！");
+        }
+    </script>
+</head>
+
+
+<body>
+<form name="input" action="http://39.108.235.35:1323/testPost" method="post" onsubmit="checkForm()">
+    key: <input type="text" name="key">
+    value: <input type="text" name="value">
+    <p>
+        <input type="submit" value="Submit">
+        <input type="reset">
+    </p>
+</form>
+
+</body>
+</html>
